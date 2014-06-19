@@ -133,6 +133,7 @@ class Seafile
     public function getUploadLink($repo)
     {
         $uploadLink = $this->api('GET', '/api2/repos/' . $repo . '/upload-link/');
+        $uploadLink = '/seafhttp/upload-api/' . strrev(array_shift(preg_split('/\//', strrev($uploadLink), 2)));
 
         return $uploadLink;
     }
@@ -148,7 +149,7 @@ class Seafile
     {
         $ch = curl_init();
 
-        if (!preg_match('/http/i', $path)) {
+        if (!preg_match('/^http(s|):/i', $path)) {
             $url = $this->getHostname() . $path;
         } else {
             $url = $path;
